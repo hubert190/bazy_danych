@@ -1,0 +1,104 @@
+
+CREATE TABLE [Samochod] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[id_marka] int NOT NULL,
+	[id_model] int NOT NULL,
+	[rok_produkcji] nvarchar(max) NOT NULL,
+	[id_cena_za_dzien] int NOT NULL,
+	[id_rezerwacja] int NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [Klient] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[Imie] int NOT NULL,
+	[Nazwisko] int NOT NULL,
+	[Numer_telefonu] nvarchar(max) NOT NULL,
+	[Email] int NOT NULL,
+	[Adres] int NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [pracownik] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[imie] int NOT NULL,
+	[nazwisko] int NOT NULL,
+	[czas_pracy] int NOT NULL,
+	[email] int NOT NULL,
+	[id_stanowisko] int NOT NULL,
+	[wyplata] int NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [marka] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[nazwa] int NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [model] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[nazwa] int NOT NULL,
+	[numer_seryjny] nvarchar(max) NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [stanowisko] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[nazwa_stanowiska] int NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [rezerwacja] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[id_klient] int NOT NULL,
+	[id_samochod] int NOT NULL,
+	[id_pracownik] int NOT NULL,
+	[status] int NOT NULL,
+	[id_platnosc] int NOT NULL,
+	[data_rozpoczencia] date NOT NULL,
+	[data_zakonczenia] date NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [platonosc] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[kwota] decimal(18,0) NOT NULL,
+	[data_platnosci] date NOT NULL,
+	[id_sposob_platnosci] int NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [sposob_platnosci] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[nazwa_sposobu] int NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+CREATE TABLE [cena_za_dzien] (
+	[id] int IDENTITY(1,1) NOT NULL UNIQUE,
+	[czas_wyporzyczenia] int NOT NULL,
+	[cena] int NOT NULL,
+	PRIMARY KEY ([id])
+);
+
+ALTER TABLE [Samochod] ADD CONSTRAINT [Samochod_fk1] FOREIGN KEY ([id_marka]) REFERENCES [marka]([id]);
+
+ALTER TABLE [Samochod] ADD CONSTRAINT [Samochod_fk2] FOREIGN KEY ([id_model]) REFERENCES [model]([id]);
+
+ALTER TABLE [Samochod] ADD CONSTRAINT [Samochod_fk4] FOREIGN KEY ([id_cena_za_dzien]) REFERENCES [cena_za_dzien]([id]);
+
+ALTER TABLE [Samochod] ADD CONSTRAINT [Samochod_fk5] FOREIGN KEY ([id_rezerwacja]) REFERENCES [rezerwacja]([id]);
+
+ALTER TABLE [pracownik] ADD CONSTRAINT [pracownik_fk5] FOREIGN KEY ([id_stanowisko]) REFERENCES [stanowisko]([id]);
+
+
+
+ALTER TABLE [rezerwacja] ADD CONSTRAINT [rezerwacja_fk1] FOREIGN KEY ([id_klient]) REFERENCES [Klient]([id]);
+
+ALTER TABLE [rezerwacja] ADD CONSTRAINT [rezerwacja_fk2] FOREIGN KEY ([id_samochod]) REFERENCES [Samochod]([id]);
+
+ALTER TABLE [rezerwacja] ADD CONSTRAINT [rezerwacja_fk3] FOREIGN KEY ([id_pracownik]) REFERENCES [pracownik]([id]);
+
+ALTER TABLE [rezerwacja] ADD CONSTRAINT [rezerwacja_fk5] FOREIGN KEY ([id_platnosc]) REFERENCES [platonosc]([id]);
+ALTER TABLE [platonosc] ADD CONSTRAINT [platonosc_fk3] FOREIGN KEY ([id_sposob_platnosci]) REFERENCES [sposob_platnosci]([id]);
