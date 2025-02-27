@@ -5,16 +5,18 @@ CREATE TABLE IF NOT EXISTS `samochod` (
 	`rok_produkcji` date NOT NULL,
 	`id_cena_za_dzien` int NOT NULL,
 	`id_rezerwacja` int NOT NULL,
+	'ilosc_w_magazynie' int NOT NULL,
 	PRIMARY KEY (`id`) 
 );
 
 
-INSERT INTO samochod (id, `id_model`, `rok_produkcji`, `id_cena_za_dzien`, `id_rezerwacja`) VALUES
-(1, 1, '2023-03-22', 1, 1),
-(2, 2, '2023-03-04', 2, 2),
-(3, 3, '2023-08-08', 3, 3),
-(4, 4, '2023-01-05', 4, 4),
-(5, 5, '2023-12-02', 5, 5);
+INSERT INTO samochod (`id_model`, `rok_produkcji`, `id_cena_za_dzien`, `id_rezerwacja`, 'ilosc_w_magazynie') VALUES
+(1, '2023-03-22', 1, 1, 23),
+(2, '2023-03-04', 2, 2, 34),
+(3, '2023-08-08', 3, 3, 45),
+(4, '2023-01-05', 4, 4, 54),
+(5, '2023-12-02', 5, 5, 36);
+
 
 
 CREATE TABLE IF NOT EXISTS `Klient` (
@@ -96,11 +98,11 @@ CREATE TABLE IF NOT EXISTS `rezerwacja` (
 );
 
 INSERT INTO rezerwacja (id, id_klient, id_samochod, id_pracownik, status, id_platnosc, data_rozpoczencia, data_zakonczenia) VALUES
-(1, 1, 2, 3, 'Zrealizowana', 1, '2024-12-01', '2024-12-07'),
-(2, 2, 3, 4, 'Zrealizowana', 2, '2024-12-03', '2024-12-10'),
-(3, 3, 4, 5, 'Oczekująca', 3, '2024-12-05', '2024-12-12'),
-(4, 4, 5, 6, 'Zrealizowana', 4, '2024-12-07', '2024-12-14'),
-(5, 5, 1, 7, 'Anulowana', 5, '2024-12-09', '2024-12-16');
+(1, 1, 2, 1, 'Zrealizowana', 1, '2024-12-01', '2024-12-07'),
+(2, 2, 3, 2, 'Zrealizowana', 2, '2024-12-03', '2024-12-10'),
+(3, 3, 4, 3, 'Oczekująca', 3, '2024-12-05', '2024-12-12'),
+(4, 4, 5, 4, 'Zrealizowana', 4, '2024-12-07', '2024-12-14'),
+(5, 5, 1, 5, 'Anulowana', 5, '2024-12-09', '2024-12-16');
 
 CREATE TABLE IF NOT EXISTS `platnosc` (
 	`id` int AUTO_INCREMENT NOT NULL UNIQUE,
@@ -120,7 +122,7 @@ INSERT INTO platnosc (id, kwota, data_platnosci, id_sposob_platnosci) VALUES
 CREATE TABLE IF NOT EXISTS sposob_platnosci (
     id int AUTO_INCREMENT NOT NULL UNIQUE,
     nazwa_sposobu text NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (`id`)
 );
 
 INSERT INTO sposob_platnosci (id, nazwa_sposobu) VALUES
@@ -174,7 +176,7 @@ JOIN klient k ON r.id_klient = k.id
 JOIN samochod s ON r.id_samochod = s.id
 JOIN model m ON s.id_model = m.id;
 
-DELECT p.kwota, p.data_platnosci, sp.nazwa_sposobu AS sposob_platnosci
+SELECT p.kwota, p.data_platnosci, sp.nazwa_sposobu AS sposob_platnosci
 FROM platnosc p
 JOIN sposob_platnosci sp ON p.id_sposob_platnosci = sp.id;
 
@@ -190,4 +192,5 @@ WHERE p.czas_pracy = 'Full-time';
 SELECT s.id, m.nazwa AS model, c.cena AS cena_za_dzien
 FROM samochod s
 JOIN model m ON s.id_model = m.id
-JOIN cena_za_dzien c ON s.id_cena_za_dzien = c
+JOIN cena_za_dzien c ON s.id_cena_za_dzien = c.id;
+
